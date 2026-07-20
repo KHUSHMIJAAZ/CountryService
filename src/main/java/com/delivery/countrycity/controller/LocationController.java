@@ -19,29 +19,27 @@ import java.util.List;
 
 @Validated
 @RestController
-@Tag(name = "Locations", description = "Country and city lookup APIs")
 public class LocationController {
 
     private final LocationService locationService;
 
-    public LocationController(LocationService locationService) {
+    public LocationController(LocationService locationService)
+    {
         this.locationService = locationService;
     }
 
     @GetMapping("/countries")
-    @Operation(summary = "List countries", description = "Returns all available countries.")
     public List<CountryResponse> getCountries() {
+
         return locationService.getCountries();
     }
 
     @GetMapping("/countries/{countryId}/cities")
-    @Operation(summary = "List cities by country", description = "Returns paginated cities for the selected country.")
     public PagedResponse<CityResponse> getCitiesByCountry(
-            @Parameter(description = "Country id", example = "1")
             @PathVariable Long countryId,
-            @Parameter(description = "Zero-based page index", example = "0")
+            @Parameter(description = "Zero-based page index")
             @RequestParam(defaultValue = "0") @Min(0) int page,
-            @Parameter(description = "Number of cities per page", example = "10")
+            @Parameter(description = "Number of cities per page")
             @RequestParam(defaultValue = "10") @Min(1) @Max(100) int size) {
         return locationService.getCitiesByCountry(countryId, page, size);
     }
@@ -49,7 +47,7 @@ public class LocationController {
     @GetMapping("/cities/{cityId}")
     @Operation(summary = "Get city details", description = "Returns detailed information for a city.")
     public CityResponse getCityById(
-            @Parameter(description = "City id", example = "101")
+            @Parameter(description = "City id")
             @PathVariable Long cityId) {
         return locationService.getCityById(cityId);
     }
